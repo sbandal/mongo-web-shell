@@ -99,6 +99,28 @@ describe('The keyword module', function () {
 
 describe('The mutateSource module', function () {
   // TODO: Test.
+  // TODO:swapMongoCalls
+  // TODO:mutateMemberExpression
+  it('swap keywords for each statement', function () {
+    var swapKeywords = mongo.mutateSource.swapKeywords('use;show;help',2);
+    var swapKeywords1 = mongo.mutateSource.swapKeywords('other;use',2);
+    var swapKeywords2 = mongo.mutateSource.swapKeywords('show',2);
+
+    var expectRes1 = "mongo.keyword.evaluate(2, 'use')";
+    var expectRes2 = "mongo.keyword.evaluate(2, 'show')";
+    var expectRes3 = "mongo.keyword.evaluate(2, 'help')";
+
+    expect(swapKeywords).toEqual(expectRes1 +'; '+ expectRes2 +'; '+ expectRes3);
+    expect(swapKeywords1).toEqual('other; '+expectRes1);
+    expect(swapKeywords2).toEqual(expectRes2);
+  });
+
+  it('converts tokens to keyword calls', function () {
+    var tokens = ['one','two','three'];
+    var convertTokens = mongo.mutateSource._convertTokensToKeywordCall(0,tokens);
+    var res = "mongo.keyword.evaluate(0, 'one', 'two', 'three')";
+    expect(convertTokens).toEqual(res);
+  });  
 });
 
 
